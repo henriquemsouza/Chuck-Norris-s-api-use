@@ -1,24 +1,30 @@
-var http = require("http");
 
-var options = {
-  "method": "GET",
-  "hostname": "api.icndb.com",
-  "port": null,
-  "path": "/jokes/random",
 
-};
+// const request = require('request');
 
-var req = http.request(options, function (res) {
-  var chunks = [];
+// var http = require('http');
+var portt =8070;
 
-  res.on("data", function (chunk) {
-    chunks.push(chunk);
-  });
 
-  res.on("end", function () {
-    var body = Buffer.concat(chunks);
-    console.log(body.toString());
-  });
+var express = require("express");
+var bodyParser = require("body-parser");
+var routes = require("./routes/routes.js");
+var app = express();
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+
+routes(app);
+
+var server = app.listen(portt, function () {
+    console.log("app running on port.", server.address().port);
 });
 
-req.end();
+
+var appRouter = function (app) {
+  app.get("/", function(req, res) {
+    res.status(200).send(myJoke);
+  });
+}
+
+module.exports = appRouter;
